@@ -105,7 +105,3 @@ if __name__ == "__main__":
     )
     keep_alive()
     asyncio.run(main())
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-    )
-    asyncio.run(main())
