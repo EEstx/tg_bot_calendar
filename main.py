@@ -58,7 +58,8 @@ async def handle_message(message: Message):
     end = event_data["end"]
 
     try:
-        created = create_event(
+        created = await asyncio.to_thread(
+            create_event,
             summary=summary,
             start_iso=start,
             end_iso=end,
