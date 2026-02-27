@@ -3,6 +3,7 @@ import logging
 import asyncio
 from datetime import datetime
 
+from aiohttp import web
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
@@ -91,8 +92,21 @@ async def handle_message(message: Message):
     )
 
 
+async def health(_request):
+    return web.Response(text="I am alive")
+
+
 async def main():
     bot = Bot(token=TOKEN)
+
+    app = web.AppRunner(web.Application())
+    app.app.router.add_get("/", health)
+    await app.setup()
+    port = int(os.getenv("PORT", 10000))
+    site = web.TCPSite(app, "0.0.0.0", port)
+    await site.start()
+    logging.info(f"Web server started on port {port}")
+
     logging.info("Bot started")
     await dp.start_polling(bot)
 
